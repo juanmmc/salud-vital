@@ -1,4 +1,4 @@
-# salud-vital
+# Salud Vital
 Primer trabajo del diplomado en microservicios en la NUR, modulo 1
 
 # Indicaciones para uso y verificación de los requerimientos
