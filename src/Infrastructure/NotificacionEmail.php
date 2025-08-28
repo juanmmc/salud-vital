@@ -3,13 +3,14 @@
 namespace Infrastructure;
 
 use Domain\NotificacionInterface;
-use Domain\Paciente;
+use Domain\Persona;
 
 class NotificacionEmail implements NotificacionInterface
 {
-    public function enviar(Paciente $paciente, string $mensaje): void
+    public function enviar(Persona $persona, string $mensaje): void
     {
-        $email = $paciente->getEmail();
-        file_put_contents('notificaciones_email.log', "Para: $email | Mensaje: $mensaje" . PHP_EOL, FILE_APPEND);
+        $email = $persona->getEmail();
+        $archivo = __DIR__ . '/../../data/notificaciones_email.log';
+        file_put_contents($archivo, "Para: $email | Mensaje: $mensaje" . PHP_EOL, FILE_APPEND);
     }
 }

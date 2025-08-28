@@ -3,7 +3,7 @@
 namespace Application;
 
 use Domain\NotificacionInterface;
-use Domain\Paciente;
+use Domain\Persona;
 
 class NotificacionService
 {
@@ -15,10 +15,10 @@ class NotificacionService
         $this->notificadores = $notificadores;
     }
 
-    public function notificar(Paciente $paciente, string $mensaje): void
+    public function notificar(Persona $persona, string $mensaje): void
     {
         foreach ($this->notificadores as $notificador) {
-            $notificador->enviar($paciente, $mensaje);
+            $notificador->enviar($persona, $mensaje);
         }
     }
 }

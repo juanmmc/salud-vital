@@ -37,6 +37,7 @@ class RepositorioDoctoresArchivo
             'apellido' => $doctor->getApellido(),
             'dni' => $doctor->getDni(),
             'telefono' => $doctor->getTelefono(),
+            'email' => $doctor->getEmail(),
             'especialidad' => $doctor->getEspecialidad()->getId(),
         ];
         $this->guardar();

@@ -3,13 +3,15 @@
 namespace Infrastructure;
 
 use Domain\NotificacionInterface;
-use Domain\Paciente;
+use Domain\Persona;
 
 class NotificacionSMS implements NotificacionInterface
 {
-    public function enviar(Paciente $paciente, string $mensaje): void
+    public function enviar(Persona $persona, string $mensaje): void
     {
-        $telefono = $paciente->getTelefono();
-        file_put_contents('notificaciones_sms.log', "Para: $telefono | Mensaje: $mensaje" . PHP_EOL, FILE_APPEND);
+        $telefono = $persona->getTelefono();
+
+        $archivo = __DIR__ . '/../../data/notificaciones_sms.log';
+        file_put_contents($archivo, "Para: $telefono | Mensaje: $mensaje" . PHP_EOL, FILE_APPEND);
     }
 }

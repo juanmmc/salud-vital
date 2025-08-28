@@ -3,20 +3,40 @@
 
 require_once __DIR__ . '/../src/Domain/Persona.php';
 require_once __DIR__ . '/../src/Domain/Paciente.php';
+require_once __DIR__ . '/../src/Domain/Especialidad.php';
+require_once __DIR__ . '/../src/Domain/Doctor.php';
+require_once __DIR__ . '/../src/Domain/CitaMedica.php';
 require_once __DIR__ . '/../src/Domain/LogOperacionInterface.php';
-require_once __DIR__ . '/../src/Infrastructure/RepositorioPacientesArchivo.php';
+require_once __DIR__ . '/../src/Domain/NotificacionInterface.php';
+require_once __DIR__ . '/../src/Domain/RepositorioCitasInterface.php';
 require_once __DIR__ . '/../src/Infrastructure/LogOperacionArchivo.php';
+require_once __DIR__ . '/../src/Infrastructure/NotificacionEmail.php';
+require_once __DIR__ . '/../src/Infrastructure/RepositorioPacientesArchivo.php';
+require_once __DIR__ . '/../src/Infrastructure/RepositorioEspecialidadesArchivo.php';
+require_once __DIR__ . '/../src/Infrastructure/RepositorioDoctoresArchivo.php';
+require_once __DIR__ . '/../src/Infrastructure/RepositorioCitasArchivo.php';
+require_once __DIR__ . '/../src/Application/NotificacionService.php';
 require_once __DIR__ . '/../src/Application/RegistroPacienteService.php';
+require_once __DIR__ . '/../src/Application/ReservaCitaService.php';
+require_once __DIR__ . '/../src/Application/CancelacionCitaService.php';
+require_once __DIR__ . '/../src/Application/ReprogramacionCitaService.php';
 
 use Domain\Paciente;
-use Infrastructure\RepositorioPacientesArchivo;
-use Application\RegistroPacienteService;
+use Domain\CitaMedica;
 use Infrastructure\LogOperacionArchivo;
+use Infrastructure\NotificacionEmail;
+use Infrastructure\RepositorioPacientesArchivo;
+use Infrastructure\RepositorioEspecialidadesArchivo;
+use Infrastructure\RepositorioDoctoresArchivo;
+use Infrastructure\RepositorioCitasArchivo;
+use Application\NotificacionService;
+use Application\RegistroPacienteService;
+use Application\ReservaCitaService;
 
 $accion = $argv[1] ?? null;
 
-if (!$accion || !in_array($accion, ['registrar', 'actualizar'])) {
-    echo "Uso: php paciente_cli.php [registrar|actualizar]\n";
+if (!$accion || !in_array($accion, ['registrar', 'actualizar', 'reservar', 'cancelar', 'reprogramar'])) {
+    echo "Uso: php paciente_cli.php [registrar|actualizar|reservar|cancelar|reprogramar]\n";
     exit(1);
 }
 
@@ -25,24 +45,78 @@ function leer($mensaje) {
     return trim(fgets(STDIN));
 }
 
-$id = leer('ID: ');
-$nombre = leer('Nombre: ');
-$apellido = leer('Apellido: ');
-$dni = leer('DNI: ');
-$telefono = leer('Teléfono: ');
-$email = leer('Email: ');
+// Registrar o actualizar paciente
+if ($accion === 'registrar' || $accion === 'actualizar') {
+    $id = leer('ID: ');
+    $nombre = leer('Nombre: ');
+    $apellido = leer('Apellido: ');
+    $dni = leer('DNI: ');
+    $telefono = leer('Teléfono: ');
+    $email = leer('Email: ');
 
-$paciente = new Paciente($id, $nombre, $apellido, $dni, $telefono, $email);
+    $repoPacientes = new RepositorioPacientesArchivo(__DIR__ . '/../data/pacientes.json');
+    $log = new LogOperacionArchivo(__DIR__ . '/../data/log_operaciones.txt');
+    
+    $servicio = new RegistroPacienteService($repoPacientes, $log);
 
-$repo = new RepositorioPacientesArchivo(__DIR__ . '/../data/pacientes.json');
-$log = new LogOperacionArchivo(__DIR__ . '/../data/log_operaciones.txt');
-$servicio = new RegistroPacienteService($repo, $log);
+    $paciente = new Paciente($id, $nombre, $apellido, $dni, $telefono, $email);
 
-if ($accion === 'registrar') {
-    $servicio->registrar($paciente);
-    echo "Paciente registrado correctamente.\n";
-} else {
-    $repo->actualizar($paciente);
-    $log->registrar('actualizacion_paciente', ['id' => $paciente->getId()]);
-    echo "Paciente actualizado correctamente.\n";
+    if ($accion === 'registrar') {
+        $servicio->registrar($paciente);
+        echo "Paciente registrado correctamente.\n";
+    } else {
+        $servicio->actualizar($paciente);
+        echo "Paciente actualizado correctamente.\n";
+    }
+}
+
+// Reservar cita
+if ($accion === 'reservar') {
+    $idCitaMedica = leer('ID Cita Médica: ');
+    $fecha = leer('Fecha (YYYY-MM-DD): ');
+    $hora = leer('Hora (HH:MM): ');
+    $idPaciente = leer('ID Paciente: ');
+    $idEspecialidad = leer('ID Especialidad: ');
+    $idDoctor = leer('ID Doctor: ');
+
+    $repoPacientes = new RepositorioPacientesArchivo(__DIR__ . '/../data/pacientes.json');
+    $repoEspecialidades = new RepositorioEspecialidadesArchivo(__DIR__ . '/../data/especialidades.json');
+    $repoDoctores = new RepositorioDoctoresArchivo(__DIR__ . '/../data/doctores.json');
+    $log = new LogOperacionArchivo(__DIR__ . '/../data/log_operaciones.txt');
+
+    $notificacionService = new NotificacionService([new NotificacionEmail()]);
+    
+    $paciente = $repoPacientes->obtenerPorId($idPaciente);
+    $especialidad = $repoEspecialidades->obtenerPorId($idEspecialidad);
+    $doctor = $repoDoctores->obtenerPorId($idDoctor);
+    
+    $citaMedica = new CitaMedica($idCitaMedica, $fecha, $hora, $paciente, $especialidad, $doctor);
+
+    $repoCitas = new RepositorioCitasArchivo(__DIR__ . '/../data/citas.json');
+    $servicio = new ReservaCitaService($repoCitas, $log, $notificacionService);
+    $servicio->reservar($citaMedica);
+    echo "Reserva de cita médica exitosa.\n";
+}
+
+// Cancelar cita
+if ($accion === 'cancelar') {
+    $idCita = leer('ID Cita: ');
+    $motivo = leer('Motivo de cancelación: ');
+
+    
+    //$servicio = new Application\CancelacionCitaService();
+    
+    echo "Cancelación de cita médica exitosa.\n";
+}
+
+// Reprogramar cita
+if ($accion === 'reprogramar') {
+    $idCita = leer('ID Cita: ');
+    $nuevaFecha = leer('Nueva fecha (YYYY-MM-DD): ');
+    $nuevaHora = leer('Nueva hora (HH:MM): ');
+
+    
+    //$servicio = new Application\ReprogramacionCitaService();
+    
+    echo "Reprogramación de cita médica exitosa.\n";
 }

@@ -2,9 +2,9 @@
 
 namespace Domain;
 
-use Domain\Paciente;
+use Domain\Persona;
 
 interface NotificacionInterface
 {
-    public function enviar(Paciente $paciente, string $mensaje): void;
+    public function enviar(Persona $persona, string $mensaje): void;
 }
