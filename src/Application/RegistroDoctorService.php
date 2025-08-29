@@ -3,15 +3,15 @@
 namespace Application;
 
 use Domain\Doctor;
-use Infrastructure\RepositorioDoctoresArchivo;
+use Domain\RepositorioDoctoresInterface;
 use Domain\LogOperacionInterface;
 
 class RegistroDoctorService
 {
-    private RepositorioDoctoresArchivo $repoDoctores;
+    private RepositorioDoctoresInterface $repoDoctores;
     private LogOperacionInterface $log;
 
-    public function __construct(RepositorioDoctoresArchivo $repoDoctores, LogOperacionInterface $log)
+    public function __construct(RepositorioDoctoresInterface $repoDoctores, LogOperacionInterface $log)
     {
         $this->repoDoctores = $repoDoctores;
         $this->log = $log;

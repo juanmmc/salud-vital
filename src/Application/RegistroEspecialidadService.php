@@ -3,15 +3,15 @@
 namespace Application;
 
 use Domain\Especialidad;
-use Infrastructure\RepositorioEspecialidadesArchivo;
+use Domain\RepositorioEspecialidadesInterface;
 use Domain\LogOperacionInterface;
 
 class RegistroEspecialidadService
 {
-    private RepositorioEspecialidadesArchivo $repoEspecialidades;
+    private RepositorioEspecialidadesInterface $repoEspecialidades;
     private LogOperacionInterface $log;
 
-    public function __construct(RepositorioEspecialidadesArchivo $repoEspecialidades, LogOperacionInterface $log)
+    public function __construct(RepositorioEspecialidadesInterface $repoEspecialidades, LogOperacionInterface $log)
     {
         $this->repoEspecialidades = $repoEspecialidades;
         $this->log = $log;

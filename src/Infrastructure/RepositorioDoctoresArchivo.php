@@ -2,10 +2,11 @@
 
 namespace Infrastructure;
 
+use Domain\RepositorioDoctoresInterface;
 use Domain\Doctor;
 use Domain\Especialidad;
 
-class RepositorioDoctoresArchivo
+class RepositorioDoctoresArchivo implements RepositorioDoctoresInterface
 {
     private string $archivo;
     private array $doctores = [];

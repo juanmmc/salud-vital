@@ -2,13 +2,13 @@
 
 namespace Application;
 
-use Infrastructure\RepositorioCitasArchivo;
+use Domain\RepositorioCitasInterface;
 
 class AgendaDoctorService
 {
-    private RepositorioCitasArchivo $repoCitas;
+    private RepositorioCitasInterface $repoCitas;
 
-    public function __construct(RepositorioCitasArchivo $repoCitas)
+    public function __construct(RepositorioCitasInterface $repoCitas)
     {
         $this->repoCitas = $repoCitas;
     }

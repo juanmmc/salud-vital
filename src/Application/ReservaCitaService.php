@@ -3,17 +3,17 @@
 namespace Application;
 
 use Domain\CitaMedica;
-use Infrastructure\RepositorioCitasArchivo;
+use Domain\RepositorioCitasInterface;
 use Domain\LogOperacionInterface;
 use Application\NotificacionService;
 
 class ReservaCitaService
 {
-    private RepositorioCitasArchivo $repoCitas;
+    private RepositorioCitasInterface $repoCitas;
     private LogOperacionInterface $log;
     private NotificacionService $notificacionService;
 
-    public function __construct(RepositorioCitasArchivo $repoCitas, LogOperacionInterface $log, NotificacionService $notificacionService)
+    public function __construct(RepositorioCitasInterface $repoCitas, LogOperacionInterface $log, NotificacionService $notificacionService)
     {
         $this->repoCitas = $repoCitas;
         $this->log = $log;

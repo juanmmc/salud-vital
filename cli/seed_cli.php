@@ -5,6 +5,8 @@ require_once __DIR__ . '/../src/Domain/Especialidad.php';
 require_once __DIR__ . '/../src/Domain/Persona.php';
 require_once __DIR__ . '/../src/Domain/Doctor.php';
 require_once __DIR__ . '/../src/Domain/LogOperacionInterface.php';
+require_once __DIR__ . '/../src/Domain/RepositorioEspecialidadesInterface.php';
+require_once __DIR__ . '/../src/Domain/RepositorioDoctoresInterface.php';
 require_once __DIR__ . '/../src/Infrastructure/RepositorioEspecialidadesArchivo.php';
 require_once __DIR__ . '/../src/Infrastructure/RepositorioDoctoresArchivo.php';
 require_once __DIR__ . '/../src/Infrastructure/LogOperacionArchivo.php';

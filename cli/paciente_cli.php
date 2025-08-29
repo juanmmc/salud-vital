@@ -10,6 +10,9 @@ require_once __DIR__ . '/../src/Domain/CitaMedica.php';
 require_once __DIR__ . '/../src/Domain/LogOperacionInterface.php';
 require_once __DIR__ . '/../src/Domain/NotificacionInterface.php';
 require_once __DIR__ . '/../src/Domain/RepositorioCitasInterface.php';
+require_once __DIR__ . '/../src/Domain/RepositorioPacientesInterface.php';
+require_once __DIR__ . '/../src/Domain/RepositorioEspecialidadesInterface.php';
+require_once __DIR__ . '/../src/Domain/RepositorioDoctoresInterface.php';
 require_once __DIR__ . '/../src/Infrastructure/LogOperacionArchivo.php';
 require_once __DIR__ . '/../src/Infrastructure/NotificacionEmail.php';
 require_once __DIR__ . '/../src/Infrastructure/RepositorioPacientesArchivo.php';
@@ -70,7 +73,7 @@ if ($accion === 'registrar' || $accion === 'actualizar') {
 
 // Lógica para reservar cita
 if ($accion === 'reservar') {
-    $idCitaMedica = leer('ID Cita Médica: ');
+    $idCita = leer('ID Cita: ');
     $fecha = leer('Fecha (YYYY-MM-DD): ');
     $hora = leer('Hora (HH:MM): ');
     $idPaciente = leer('ID Paciente: ');
@@ -90,7 +93,7 @@ if ($accion === 'reservar') {
     $especialidad = $repoEspecialidades->obtenerPorId($idEspecialidad);
     $doctor = $repoDoctores->obtenerPorId($idDoctor);
     
-    $citaMedica = new CitaMedica($idCitaMedica, $fecha, $hora, $paciente, $especialidad, $doctor);
+    $citaMedica = new CitaMedica($idCita, $fecha, $hora, $paciente, $especialidad, $doctor);
 
     $servicio = new ReservaCitaService($repoCitas, $log, $notificacionService);
     $servicio->reservar($citaMedica);
@@ -108,16 +111,8 @@ if ($accion === 'cancelar') {
     ]);
     $repoPacientes = new RepositorioPacientesArchivo(__DIR__ . '/../data/pacientes.json');
 
-    $cita = $repoCitas->obtenerPorId($idCita);
-    if (!$cita) {
-        echo "Cita no encontrada.\n";
-        exit(1);
-    }
-    $paciente = $repoPacientes->obtenerPorId($cita->getPaciente()->getId());
-    $cita->setPaciente($paciente);
-
-    $servicio = new CancelacionCitaService($repoCitas, $log, $notificacionService);
-    $servicio->cancelar($cita);
+    $servicio = new CancelacionCitaService($repoCitas, $repoPacientes, $log, $notificacionService);
+    $servicio->cancelar($idCita);
     echo "Cancelación de cita médica exitosa.\n";
 }
 
@@ -134,17 +129,7 @@ if ($accion === 'reprogramar') {
     ]);
     $repoPacientes = new RepositorioPacientesArchivo(__DIR__ . '/../data/pacientes.json');
 
-    $cita = $repoCitas->obtenerPorId($idCita);
-    if (!$cita) {
-        echo "Cita no encontrada.\n";
-        exit(1);
-    }
-
-    $paciente = $repoPacientes->obtenerPorId($cita->getPaciente()->getId());
-    $cita->setPaciente($paciente);
-
-    $servicio = new ReprogramacionCitaService($repoCitas, $log, $notificacionService);
-    $servicio->reprogramar($cita, $nuevaFecha, $nuevaHora);
-
+    $servicio = new ReprogramacionCitaService($repoCitas, $repoPacientes, $log, $notificacionService);
+    $servicio->reprogramar($idCita, $nuevaFecha, $nuevaHora);
     echo "Reprogramación de cita médica exitosa.\n";
 }

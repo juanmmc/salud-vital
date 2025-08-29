@@ -3,8 +3,9 @@
 namespace Infrastructure;
 
 use Domain\Especialidad;
+use Domain\RepositorioEspecialidadesInterface;
 
-class RepositorioEspecialidadesArchivo
+class RepositorioEspecialidadesArchivo implements RepositorioEspecialidadesInterface
 {
     private string $archivo;
     private array $especialidades = [];

@@ -3,8 +3,9 @@
 namespace Infrastructure;
 
 use Domain\Paciente;
+use Domain\RepositorioPacientesInterface;
 
-class RepositorioPacientesArchivo
+class RepositorioPacientesArchivo implements RepositorioPacientesInterface
 {
     private string $archivo;
     private array $pacientes = [];
