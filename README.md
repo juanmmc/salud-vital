@@ -47,3 +47,7 @@ php cli/doctor_cli.php [agenda|aprobar|rechazar|resumen]
 5. **Dependency Inversion Principle (DIP)**:  
    Las clases de alto nivel dependen de abstracciones en lugar de implementaciones concretas. Por ejemplo:
    - Los servicios como `AprobacionCitaService` dependen de interfaces (`RepositorioCitasInterface`, `RepositorioDoctoresInterface`) en lugar de implementaciones concretas.
+
+## Repositorio del proyecto
+
+El código fuente de este proyecto está disponible en GitHub: [Salud Vital](https://github.com/juanmmc/salud-vital)
