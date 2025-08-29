@@ -41,9 +41,19 @@ class CitaMedica
         return $this->fecha;
     }
 
+    public function setFecha(string $fecha): void
+    {
+        $this->fecha = $fecha;
+    }
+
     public function getHora(): string
     {
         return $this->hora;
+    }
+
+    public function setHora(string $hora): void
+    {
+        $this->hora = $hora;
     }
 
     public function getPaciente(): Paciente
@@ -51,14 +61,29 @@ class CitaMedica
         return $this->paciente;
     }
 
+    public function setPaciente(Paciente $paciente): void
+    {
+        $this->paciente = $paciente;
+    }
+
     public function getEspecialidad(): Especialidad
     {
         return $this->especialidad;
     }
 
+    public function setEspecialidad(Especialidad $especialidad): void
+    {
+        $this->especialidad = $especialidad;
+    }
+
     public function getDoctor(): Doctor
     {
         return $this->doctor;
+    }
+
+    public function setDoctor(Doctor $doctor): void
+    {
+        $this->doctor = $doctor;
     }
 
     public function getEstado(): string

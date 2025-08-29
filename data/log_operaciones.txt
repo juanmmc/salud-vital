@@ -38,3 +38,10 @@
 {"fecha":"2025-08-29 00:31:53","operacion":"registro_doctor","datos":{"id":"doc5","nombre":"Sof\u00eda"}}
 {"fecha":"2025-08-29 00:33:10","operacion":"reserva_cita","datos":{"id":"cit1"}}
 {"fecha":"2025-08-29 00:35:22","operacion":"reserva_cita","datos":{"id":"cit1"}}
+{"fecha":"2025-08-29 02:25:42","operacion":"cancelacion_cita","datos":{"id":"cit1"}}
+{"fecha":"2025-08-29 02:40:04","operacion":"reserva_cita","datos":{"id":"cit2"}}
+{"fecha":"2025-08-29 02:41:06","operacion":"cancelacion_cita","datos":{"id":"cit2"}}
+{"fecha":"2025-08-29 02:49:39","operacion":"registro_paciente","datos":{"id":"pac2"}}
+{"fecha":"2025-08-29 02:50:36","operacion":"reserva_cita","datos":{"id":"cit3"}}
+{"fecha":"2025-08-29 02:51:22","operacion":"reprogramacion_cita","datos":{"id":"cit3","fecha":"2025-12-31","hora":"10:00"}}
+{"fecha":"2025-08-29 02:52:16","operacion":"cancelacion_cita","datos":{"id":"cit3"}}

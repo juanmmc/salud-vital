@@ -47,19 +47,21 @@ class RepositorioCitasArchivo implements RepositorioCitasInterface
         $this->guardar();
     }
 
-    public function cancelar(string $idCita): void
+    public function cancelar(CitaMedica $cita): void
     {
+        $idCita = $cita->getId();
         if (isset($this->citas[$idCita])) {
             $this->citas[$idCita]['estado'] = 'cancelada';
             $this->guardar();
         }
     }
 
-    public function reprogramar(string $idCita, string $nuevaFecha, string $nuevaHora): void
+    public function reprogramar(CitaMedica $cita): void
     {
+        $idCita = $cita->getId();
         if (isset($this->citas[$idCita])) {
-            $this->citas[$idCita]['fecha'] = $nuevaFecha;
-            $this->citas[$idCita]['hora'] = $nuevaHora;
+            $this->citas[$idCita]['fecha'] = $cita->getFecha();
+            $this->citas[$idCita]['hora'] = $cita->getHora();
             $this->citas[$idCita]['estado'] = 'reprogramada';
             $this->guardar();
         }

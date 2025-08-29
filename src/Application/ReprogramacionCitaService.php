@@ -2,6 +2,7 @@
 
 namespace Application;
 
+use Domain\CitaMedica;
 use Infrastructure\RepositorioCitasArchivo;
 use Domain\LogOperacionInterface;
 use Application\NotificacionService;
@@ -19,14 +20,11 @@ class ReprogramacionCitaService
         $this->notificacionService = $notificacionService;
     }
 
-    public function reprogramar(string $idCita, string $nuevaFecha, string $nuevaHora): void
+    public function reprogramar(CitaMedica $cita): void
     {
-        $this->repoCitas->reprogramar($idCita, $nuevaFecha, $nuevaHora);
-        $this->log->registrar('reprogramacion_cita', ['id' => $idCita, 'fecha' => $nuevaFecha, 'hora' => $nuevaHora]);
-        $cita = $this->repoCitas->obtenerPorId($idCita);
-        if ($cita) {
-            $mensaje = 'Su cita ha sido reprogramada.';
-            $this->notificacionService->notificar($cita->getPaciente(), $mensaje);
-        }
+        $this->repoCitas->reprogramar($cita);
+        $this->log->registrar('reprogramacion_cita', ['id' => $cita->getId(), 'fecha' => $cita->getFecha(), 'hora' => $cita->getHora()]);
+        $mensaje = 'Su cita ha sido reprogramada.';
+        $this->notificacionService->notificar($cita->getPaciente(), $mensaje);
     }
 }

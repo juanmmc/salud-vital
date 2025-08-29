@@ -2,6 +2,7 @@
 
 namespace Application;
 
+use Domain\CitaMedica;
 use Infrastructure\RepositorioCitasArchivo;
 use Domain\LogOperacionInterface;
 use Application\NotificacionService;
@@ -19,14 +20,11 @@ class CancelacionCitaService
         $this->notificacionService = $notificacionService;
     }
 
-    public function cancelar(string $idCita): void
+    public function cancelar(CitaMedica $cita): void
     {
-        $this->repoCitas->cancelar($idCita);
-        $this->log->registrar('cancelacion_cita', ['id' => $idCita]);
-        $cita = $this->repoCitas->obtenerPorId($idCita);
-        if ($cita) {
-            $mensaje = 'Su cita ha sido cancelada.';
-            $this->notificacionService->notificar($cita->getPaciente(), $mensaje);
-        }
+        $this->repoCitas->cancelar($cita);
+        $this->log->registrar('cancelacion_cita', ['id' => $cita->getId()]);
+        $mensaje = 'Su cita ha sido cancelada.';
+        $this->notificacionService->notificar($cita->getPaciente(), $mensaje);
     }
 }

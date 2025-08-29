@@ -7,8 +7,8 @@ use Domain\CitaMedica;
 interface RepositorioCitasInterface
 {
     public function reservar(CitaMedica $cita): void;
-    public function cancelar(string $idCita): void;
-    public function reprogramar(string $idCita, string $nuevaFecha, string $nuevaHora): void;
+    public function cancelar(CitaMedica $cita): void;
+    public function reprogramar(CitaMedica $cita): void;
     public function obtenerPorId(string $idCita): ?CitaMedica;
     /**
      * @return CitaMedica[]
