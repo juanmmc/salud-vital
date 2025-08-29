@@ -1,6 +1,7 @@
 <?php
 // cli/paciente_cli.php
 
+require_once __DIR__ . '/cli_utils.php';
 require_once __DIR__ . '/../src/Domain/Persona.php';
 require_once __DIR__ . '/../src/Domain/Paciente.php';
 require_once __DIR__ . '/../src/Domain/Especialidad.php';
@@ -42,12 +43,7 @@ if (!$accion || !in_array($accion, ['registrar', 'actualizar', 'reservar', 'canc
     exit(1);
 }
 
-function leer($mensaje) {
-    echo $mensaje;
-    return trim(fgets(STDIN));
-}
-
-// Registrar o actualizar paciente
+// Lóica para registrar o actualizar paciente
 if ($accion === 'registrar' || $accion === 'actualizar') {
     $id = leer('ID: ');
     $nombre = leer('Nombre: ');
@@ -72,7 +68,7 @@ if ($accion === 'registrar' || $accion === 'actualizar') {
     }
 }
 
-// Reservar cita
+// Lógica para reservar cita
 if ($accion === 'reservar') {
     $idCitaMedica = leer('ID Cita Médica: ');
     $fecha = leer('Fecha (YYYY-MM-DD): ');
@@ -101,7 +97,7 @@ if ($accion === 'reservar') {
     echo "Reserva de cita médica exitosa.\n";
 }
 
-// Cancelar cita
+// Lógica para cancelar cita
 if ($accion === 'cancelar') {
     $idCita = leer('ID Cita: ');
 
@@ -125,7 +121,7 @@ if ($accion === 'cancelar') {
     echo "Cancelación de cita médica exitosa.\n";
 }
 
-// Reprogramar cita
+// Lógica para reprogramar cita
 if ($accion === 'reprogramar') {
     $idCita = leer('ID Cita: ');
     $nuevaFecha = leer('Nueva fecha (YYYY-MM-DD): ');
