@@ -2,6 +2,7 @@
 
 namespace Application;
 
+use Domain\CitaMedica;
 use Infrastructure\RepositorioCitasArchivo;
 use Domain\LogOperacionInterface;
 use Application\NotificacionService;
@@ -19,27 +20,20 @@ class AprobacionCitaService
         $this->notificacionService = $notificacionService;
     }
 
-    public function aprobar(string $idCita): void
+    public function aprobar(CitaMedica $cita): void
     {
-        $cita = $this->repoCitas->obtenerPorId($idCita);
-        if ($cita) {
-            $cita->aprobar();
-            $this->repoCitas->reservar($cita);
-            $this->log->registrar('aprobacion_cita', ['id' => $idCita]);
-            $mensaje = 'Su cita ha sido aprobada.';
-            $this->notificacionService->notificar($cita->getPaciente(), $mensaje);
-        }
+        $this->repoCitas->aprobar($cita);
+        $this->log->registrar('aprobacion_cita', ['id' => $cita->getId()]);
+        $mensaje = 'Cita aprobada.';
+        $this->notificacionService->notificar($cita->getDoctor(), $mensaje);
     }
 
-    public function rechazar(string $idCita): void
+    public function rechazar(CitaMedica $cita): void
     {
-        $cita = $this->repoCitas->obtenerPorId($idCita);
-        if ($cita) {
-            $cita->rechazar();
-            $this->repoCitas->reservar($cita);
-            $this->log->registrar('rechazo_cita', ['id' => $idCita]);
-            $mensaje = 'Su cita ha sido rechazada.';
-            $this->notificacionService->notificar($cita->getPaciente(), $mensaje);
-        }
+        $this->repoCitas->rechazar($cita);
+        $this->log->registrar('rechazo_cita', ['id' => $cita->getId()]);
+        $mensaje = 'Cita rechazada.';
+        $this->notificacionService->notificar($cita->getDoctor(), $mensaje);
     }
+
 }

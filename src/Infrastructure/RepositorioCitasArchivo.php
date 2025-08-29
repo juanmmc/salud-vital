@@ -42,7 +42,7 @@ class RepositorioCitasArchivo implements RepositorioCitasInterface
             'especialidad' => $cita->getEspecialidad()->getId(),
             'doctor' => $cita->getDoctor()->getId(),
             'estado' => $cita->getEstado(),
-            'resumenConsulta' => $cita->getResumenConsulta(),
+            'resumen' => $cita->getResumen(),
         ];
         $this->guardar();
     }
@@ -56,13 +56,40 @@ class RepositorioCitasArchivo implements RepositorioCitasInterface
         }
     }
 
-    public function reprogramar(CitaMedica $cita): void
+    public function reprogramar(CitaMedica $cita, string $nuevaFecha, string $nuevaHora): void
     {
         $idCita = $cita->getId();
         if (isset($this->citas[$idCita])) {
-            $this->citas[$idCita]['fecha'] = $cita->getFecha();
-            $this->citas[$idCita]['hora'] = $cita->getHora();
+            $this->citas[$idCita]['fecha'] = $nuevaFecha;
+            $this->citas[$idCita]['hora'] = $nuevaHora;
             $this->citas[$idCita]['estado'] = 'reprogramada';
+            $this->guardar();
+        }
+    }
+
+    public function aprobar(CitaMedica $cita): void
+    {
+        $idCita = $cita->getId();
+        if (isset($this->citas[$idCita])) {
+            $this->citas[$idCita]['estado'] = 'aprobada';
+            $this->guardar();
+        }
+    }
+
+    public function rechazar(CitaMedica $cita): void
+    {
+        $idCita = $cita->getId();
+        if (isset($this->citas[$idCita])) {
+            $this->citas[$idCita]['estado'] = 'rechazada';
+            $this->guardar();
+        }
+    }
+
+    public function registrarResumen(CitaMedica $cita, string $resumen): void
+    {
+        $idCita = $cita->getId();
+        if (isset($this->citas[$idCita])) {
+            $this->citas[$idCita]['resumen'] = $resumen;
             $this->guardar();
         }
     }
@@ -85,9 +112,6 @@ class RepositorioCitasArchivo implements RepositorioCitasInterface
             $doctor,
             $data['estado'] ?? 'pendiente'
         );
-        if (!empty($data['resumenConsulta'])) {
-            $cita->registrarResumenConsulta($data['resumenConsulta']);
-        }
         return $cita;
     }
 
@@ -108,9 +132,6 @@ class RepositorioCitasArchivo implements RepositorioCitasInterface
                     $doctor,
                     $data['estado'] ?? 'pendiente'
                 );
-                if (!empty($data['resumenConsulta'])) {
-                    $cita->registrarResumenConsulta($data['resumenConsulta']);
-                }
                 $result[] = $cita;
             }
         }
@@ -134,9 +155,6 @@ class RepositorioCitasArchivo implements RepositorioCitasInterface
                     $doctor,
                     $data['estado'] ?? 'pendiente'
                 );
-                if (!empty($data['resumenConsulta'])) {
-                    $cita->registrarResumenConsulta($data['resumenConsulta']);
-                }
                 $result[] = $cita;
             }
         }

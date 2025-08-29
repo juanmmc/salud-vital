@@ -144,14 +144,11 @@ if ($accion === 'reprogramar') {
         exit(1);
     }
 
-    $cita->setFecha($nuevaFecha);
-    $cita->setHora($nuevaHora);
-
     $paciente = $repoPacientes->obtenerPorId($cita->getPaciente()->getId());
     $cita->setPaciente($paciente);
 
     $servicio = new ReprogramacionCitaService($repoCitas, $log, $notificacionService);
-    $servicio->reprogramar($cita);
+    $servicio->reprogramar($cita, $nuevaFecha, $nuevaHora);
 
     echo "Reprogramación de cita médica exitosa.\n";
 }

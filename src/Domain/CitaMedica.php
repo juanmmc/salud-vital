@@ -11,7 +11,7 @@ class CitaMedica
     private Especialidad $especialidad;
     private Doctor $doctor;
     private string $estado; // pendiente, aprobada, rechazada, cancelada, reprogramada
-    private ?string $resumenConsulta = null;
+    private ?string $resumen = null;
 
     public function __construct(
         string $id,
@@ -41,19 +41,9 @@ class CitaMedica
         return $this->fecha;
     }
 
-    public function setFecha(string $fecha): void
-    {
-        $this->fecha = $fecha;
-    }
-
     public function getHora(): string
     {
         return $this->hora;
-    }
-
-    public function setHora(string $hora): void
-    {
-        $this->hora = $hora;
     }
 
     public function getPaciente(): Paciente
@@ -91,35 +81,9 @@ class CitaMedica
         return $this->estado;
     }
 
-    public function aprobar(): void
+    public function getResumen(): ?string
     {
-        $this->estado = 'aprobada';
+        return $this->resumen;
     }
 
-    public function rechazar(): void
-    {
-        $this->estado = 'rechazada';
-    }
-
-    public function cancelar(): void
-    {
-        $this->estado = 'cancelada';
-    }
-
-    public function reprogramar(string $nuevaFecha, string $nuevaHora): void
-    {
-        $this->fecha = $nuevaFecha;
-        $this->hora = $nuevaHora;
-        $this->estado = 'reprogramada';
-    }
-
-    public function registrarResumenConsulta(string $resumen): void
-    {
-        $this->resumenConsulta = $resumen;
-    }
-
-    public function getResumenConsulta(): ?string
-    {
-        return $this->resumenConsulta;
-    }
 }
